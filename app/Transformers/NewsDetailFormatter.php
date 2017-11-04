@@ -23,11 +23,10 @@ class NewsDetailFormatter extends TransformerAbstract
      */
     protected $defaultIncludes = ['comments'];
 
-    public function includeComments($resource) {
-        $com = $resource->comments()->get();
-        if(!empty($com))
-            return $this->item($com, new CommentsFormatter());
-        return null;
+    public function includeComments($resource){
+        if(empty($resource)) return NULL;
+        $data = $resource->comments()->get();
+        return $this->collection($data, new CommentsFormatter());
     }
 
     /**

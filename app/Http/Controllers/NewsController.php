@@ -17,7 +17,6 @@ class NewsController extends Controller
 
     /*
      * Daftar semua berita (title dan kategori)
-     * +pagination
      * +filter : title, description
      */
     public function getNewsList(Request $request){
@@ -26,7 +25,7 @@ class NewsController extends Controller
             'title' => 'sometimes',
             'description' => 'sometimes'
         ]);
-
+        $request = $request->all();
         isset($request['limit']) ? $limit = $request['limit'] : $limit = 10;
 
         $news = NewsModel::orderBy('created_at')->get();
@@ -39,7 +38,7 @@ class NewsController extends Controller
         }
 
         if(count($news) > 0){
-            return $this->pagination_data($news, $limit, new NewsFormatter());
+            return $this->list_data($news, new NewsFormatter());
         }
         return $this->record_not_found();
     }
@@ -47,12 +46,9 @@ class NewsController extends Controller
     /*
      * Detail berita dengan komentar
      */
-    public function getNewsDetail(Request $request){
-        $this->validate($request, [
-            'id' => 'required'
-        ]);
+    public function getNewsDetail($id){
 
-        $news = NewsModel::where('id', $request['id'])->first();
+        $news = NewsModel::where('id', $id)->first();
 
         if(count($news) > 0){
             return $this->detail($news, new NewsDetailFormatter());
@@ -69,6 +65,8 @@ class NewsController extends Controller
             'title'         => 'required',
             'description'   => 'required'
         ]);
+
+        $request = $request->all();
 
         $news = new NewsModel();
         $news->category_id  = $request['category_id'];

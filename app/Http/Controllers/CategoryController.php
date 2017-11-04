@@ -17,16 +17,14 @@ class CategoryController extends Controller
 
     /*
      * Daftar kategori
-     * +pagination
      * +filter : name
      */
     public function getCategoryList(Request $request){
         $this->validate($request, [
-            'limit' => 'sometimes',
             'name' => 'sometimes'
         ]);
 
-        isset($request['limit']) ? $limit = $request['limit'] : $limit = 10;
+        $request = $request->all();
 
         $cat = CategoryModel::orderBy('created_at')->get();
 
@@ -35,7 +33,7 @@ class CategoryController extends Controller
         }
 
         if(count($cat) > 0){
-            return $this->pagination_data($cat, $limit, new CategoryFormatter());
+            return $this->list_data($cat, new CategoryFormatter());
         }
         return $this->record_not_found();
     }
@@ -43,12 +41,9 @@ class CategoryController extends Controller
     /*
      * Daftar berita sesuai kategori
      */
-    public function getNewsByCategory(Request $request){
-        $this->validate($request, [
-            'id' => 'required',
-        ]);
+    public function getNewsByCategory($id){
 
-        $cat = CategoryModel::where('id', $request['id'])->first();
+        $cat = CategoryModel::where('id', $id)->first();
 
         if(count($cat) > 0){
             return $this->detail($cat, new CategoryNewsFormatter());
@@ -63,6 +58,8 @@ class CategoryController extends Controller
         $this->validate($request, [
             'name' => 'required'
         ]);
+
+        $request = $request->all();
 
         $cat = new CategoryModel();
         $cat->name = $request['name'];

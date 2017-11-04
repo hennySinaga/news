@@ -23,7 +23,7 @@ $app->group(['prefix' => 'api/v1'], function($app)
 
     $app->get('category/list','CategoryController@getCategoryList');
     $app->get('category/news/{id}','CategoryController@getNewsByCategory');
-    $app->post('news-post','CategoryController@postCategory');
+    $app->post('category/post','CategoryController@postCategory');
 
     $app->post('comments/post','CommentsController@postComment');
 });

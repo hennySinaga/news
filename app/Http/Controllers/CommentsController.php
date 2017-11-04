@@ -25,6 +25,7 @@ class CommentsController extends Controller
             'news_id' => 'required|exists:news,id',
             'content'   => 'required'
         ]);
+        $request = $request->all();
 
         $comm = new CommentsModel();
         $comm->news_id = $request['news_id'];

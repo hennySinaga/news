@@ -23,11 +23,17 @@ class CategoryNewsFormatter extends TransformerAbstract
      */
     protected $defaultIncludes = ['news'];
 
-    public function includeNews($resource) {
+    /*public function includeNews($resource) {
         $com = $resource->news()->get();
         if(!empty($com))
             return $this->item($com, new NewsFormatter());
         return null;
+    }*/
+
+    public function includeNews($resource){
+        if(empty($resource)) return NULL;
+        $data = $resource->news()->get();
+        return $this->collection($data, new NewsFormatter());
     }
     /**
      * Transform object into a generic array
