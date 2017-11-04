@@ -45,20 +45,13 @@ class CategoryController extends Controller
      */
     public function getNewsByCategory(Request $request){
         $this->validate($request, [
-            'limit' => 'sometimes',
-            'name' => 'sometimes'
+            'id' => 'required',
         ]);
 
-        isset($request['limit']) ? $limit = $request['limit'] : $limit = 10;
-
-        $cat = CategoryModel::orderBy('created_at')->get();
-
-        if(!empty($request['name']) && $request['name'] != ''){
-            $cat = $cat->where('name', 'LIKE', '%'.$request['name'].'%');
-        }
+        $cat = CategoryModel::where('id', $request['id'])->first();
 
         if(count($cat) > 0){
-            return $this->pagination_data($cat, $limit, new CategoryNewsFormatter());
+            return $this->detail($cat, new CategoryNewsFormatter());
         }
         return $this->record_not_found();
     }

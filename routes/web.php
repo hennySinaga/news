@@ -14,3 +14,16 @@
 $app->get('/', function () use ($app) {
     return "News API";
 });
+
+$app->group(['prefix' => 'api/v1'], function($app)
+{
+    $app->get('news/list','NewsController@getNewsList');
+    $app->get('news/detail/{id}','NewsController@getNewsDetail');
+    $app->post('news/post','NewsController@postNews');
+
+    $app->get('category/list','CategoryController@getCategoryList');
+    $app->get('category/news/{id}','CategoryController@getNewsByCategory');
+    $app->post('news-post','CategoryController@postCategory');
+
+    $app->post('comments/post','CommentsController@postComment');
+});

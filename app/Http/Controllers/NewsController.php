@@ -63,7 +63,7 @@ class NewsController extends Controller
     /*
      * Submit berita
      */
-    public function postBerita(Request $request){
+    public function postNews(Request $request){
         $this->validate($request, [
             'category_id'   => 'required|exists:category,id',
             'title'         => 'required',
